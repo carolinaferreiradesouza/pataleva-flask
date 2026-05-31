@@ -1,5 +1,9 @@
 # 🐾 PataLeva - Sistema de Pedidos para Dog Walkers
 
+## 👥 Equipe
+* **Carolina Ferreira de Souza**
+* **Germana Pinho de Souza**
+
 ## 📋 Descrição do Sistema
 O **PataLeva** é uma aplicação web inspirada em modelos de corrida por aplicativo (como Uber/99), desenvolvida especificamente para tutores de cães que enfrentam rotinas intensas de trabalho ou home office e precisam terceirizar o passeio de seus pets. 
 
