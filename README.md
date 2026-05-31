@@ -88,6 +88,6 @@ SUPABASE_KEY=sua-chave-anon-publica-gerada-no-painel
 ### 5. Inicializar o Servidor Local
 Execute a aplicação Flask através do comando:
 ```bash
-flask --app flask_app run
+python -m flask --app flask_app run
 ```
 Abra o navegador de sua preferência e digite o endereço local gerado pelo framework: **[http://127.0.0.1:5000](http://127.0.0.1:5000)**.
