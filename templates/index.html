@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PataLeva - Uber para Dog Walkers</title>
+    <!-- Link corrigido e direto do Bootstrap 5 CSS -->
+    <link rel="stylesheet" href="https://jsdelivr.net">
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">🐾 PataLeva</a>
+            <span class="navbar-text text-white d-none d-md-inline">Encontre um passeador para o seu melhor amigo</span>
+        </div>
+    </nav>
+
+    <div class="container mb-5">
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="row g-4">
+            <!-- Formulário -->
+            <div class="col-md-4">
+                <div class="card shadow-sm border-0 p-3">
+                    <h4 class="card-title mb-3">Solicitar Passeio</h4>
+                    <form action="{{ url_for('solicitar') }}" method="POST">
+                        <div class="mb-3">
+                            <label for="dog_name" class="form-label">Nome do Cachorro</label>
+                            <input type="text" class="form-control" id="dog_name" name="dog_name" placeholder="Ex: Bob" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="duration" class="form-label">Duração do Passeio</label>
+                            <select class="form-select" id="duration" name="duration" required>
+                                <option value="" disabled selected>Escolha o tempo</option>
+                                <option value="30">30 minutos</option>
+                                <option value="40">40 minutos</option>
+                                <option value="60">60 minutos</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Endereço de Busca</label>
+                            <textarea class="form-control" id="address" name="address" rows="3" placeholder="Rua, número, bairro..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">Pedir Passeador 🐕</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Tabela de Pedidos -->
+            <div class="col-md-8">
+                <div class="card shadow-sm border-0 p-3">
+                    <h4 class="card-title mb-3">Pedidos de Passeio Ativos</h4>
+                    
+                    {% if not orders %}
+                        <p class="text-muted text-center my-4">Nenhum pedido de passeio foi feito ainda.</p>
+                    {% else %}
+                        <div class="table-responsive">
+                            <table class="table table-striped align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Pet</th>
+                                        <th>Tempo</th>
+                                        <th>Endereço</th>
+                                        <th>Status</th>
+                                        <th class="text-end">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for order in orders %}
+                                        <tr>
+                                            <td><strong>{{ order.dog_name }}</strong></td>
+                                            <td><span class="badge bg-secondary text-white p-2">{{ order.duration }} min</span></td>
+                                            <td><small class="text-muted">{{ order.address }}</small></td>
+                                            <td>
+                                                <!-- Condições de cores corrigidas para bater com o banco da imagem -->
+                                                {% if order.status == 'Pendente' %}
+                                                    <span class="badge bg-warning text-dark p-2" style="background-color: #ffc107 !important; color: #000 !important;">Pendente</span>
+                                                {% elif order.status == 'Em Andamento' %}
+                                                    <span class="badge bg-info text-white p-2" style="background-color: #0dcaf0 !important; color: #fff !important;">Em Andamento</span>
+                                                {% elif order.status == 'Concluido' or order.status == 'Concluído' %}
+                                                    <span class="badge bg-success text-white p-2" style="background-color: #198754 !important; color: #fff !important;">Concluído</span>
+                                                {% else %}
+                                                    <span class="badge bg-secondary text-white p-2">{{ order.status }}</span>
+                                                {% endif %}
+                                            </td>
+                                            <td class="text-end">
+                                                <div class="d-flex justify-content-end gap-2">
+                                                    <a href="{{ url_for('editar', order_id=order.id) }}" class="btn btn-sm btn-primary">Editar</a>
+                                                    <form action="{{ url_for('deletar', order_id=order.id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja cancelar?');">
+                                                        <button type="submit" class="btn btn-sm btn-danger">Cancelar</button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://jsdelivr.net"></script>
+</body>
+</html>

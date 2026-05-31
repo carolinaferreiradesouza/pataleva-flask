@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Solicitação - PataLeva</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://jsdelivr.net" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <!-- Barra de Navegação -->
+    <nav class="navbar navbar-dark bg-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand font-weight-bold" href="#">🐾 PataLeva</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <h4 class="card-title mb-4">Atualizar Pedido de Passeio</h4>
+                        
+                        {% if not order %}
+                            <div class="alert alert-danger">Pedido não encontrado.</div>
+                            <a href="{{ url_for('index') }}" class="btn btn-secondary w-100">Voltar para o Início</a>
+                        {% else %}
+                            <!-- Formulário de Edição preenchido com dados existentes -->
+                            <form action="{{ url_for('editar', order_id=order.id) }}" method="POST">
+                                
+                                <div class="mb-3">
+                                    <label class="form-label text-muted">Nome do Pet (Não pode ser alterado)</label>
+                                    <input type="text" class="form-control bg-light" value="{{ order.dog_name }}" readonly>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label text-muted">Duração (Não pode ser alterada)</label>
+                                    <input type="text" class="form-control bg-light" value="{{ order.duration }} minutos" readonly>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="address" class="form-label">Atualizar Endereço de Busca</label>
+                                    <textarea class="form-control" id="address" name="address" rows="3" required>{{ order.address }}</textarea>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label for="status" class="form-label">Status do Passeio</label>
+                                    <select class="form-select" id="status" name="status" required>
+    <option value="Pendente" {% if order.status == 'Pendente' %}selected{% endif %}>Pendente</option>
+    <option value="Em Andamento" {% if order.status == 'Em Andamento' %}selected{% endif %}>Em Andamento</option>
+    <option value="Concluido" {% if order.status == 'Concluido' or order.status == 'Concluído' %}selected{% endif %}>Concluído</option>
+</select>
+
+                                </div>
+
+                                <div class="d-flex gap-2">
+                                    <a href="{{ url_for('index') }}" class="btn btn-outline-secondary w-50">Voltar</a>
+                                    <button type="submit" class="btn btn-primary w-50">Salvar Alterações</button>
+                                </div>
+
+                            </form>
+                        {% endif %}
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://jsdelivr.net"></script>
+</body>
+</html>
